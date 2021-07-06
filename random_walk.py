@@ -8,8 +8,17 @@ def console_clear():
         return
     os.system("clear")
 def draw(matriz):
+    global steps, dimension
+    size = dimension*2 + 2
+    txt = "mov = {}".format(steps)
+    posx = "x = {}".format(x)
+    posy = "y = {}".format(y)
+    r = int(size/2) # Para dividir o largura em 2
+    q = int(r/2) # Para dividir a largura em 4
     console_clear()
+    print(colorama.Back.BLUE + " "*(r - int(len(txt)/2) - 2) + txt + " "*(r - (len(txt) - int(len(txt)/2)) - 2) + colorama.Style.RESET_ALL) # Corrigir isso
     print("\n".join("".join(el for el in row) for row in matriz))
+    print(colorama.Back.BLUE + " "*(q - int(len(posx)/2) - 1) + posx + " "*(q - (len(posx) - int(len(posx)/2))) + " "*(q - int(len(posy)/2)) + posy + " "*(q - (len(posy) - int(len(posy)/2)) - 1) + colorama.Style.RESET_ALL)
 
 dimension = int(input("Digite a dimensão da rede: ")) + 2
 console_clear()
@@ -20,7 +29,7 @@ console_clear()
 
 box_symb = ["\u2554","\u2557","\u2551","\u2550","\u255A","\u255D", "\u001b[35m\u25A0\u001b[0m", "\u001b[35m\u2584\u001b[0m", "\u001b[35m\u2580\u001b[0m"]
 matrix = [[0 for i in range(dimension)] for j in range(dimension)] # Matriz que vai ser printada no console
-pos_init = int(dimension/2)
+pos_init = int(dimension/2) - 1
 y,x = [pos_init,pos_init] # Posição inicial da partícula
 steps = 0
 

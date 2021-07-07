@@ -1,7 +1,8 @@
 from random import random
 import time, colorama, os, platform
 os_name = platform.system()
-
+# 3 opções: dessa, utilizando o np ou utilizando uma matriz só com as linhas, com todos os caracteres 
+# já concatenados, onde a cada mudança de posição apenas as 2 linhas envolvidas são alteradas. Última mais leve, provavelmente.
 def console_clear():
     if os_name == "Windows":
         os.system("cls")
@@ -13,12 +14,12 @@ def draw(matriz):
     txt = "mov = {}".format(steps)
     posx = "x = {}".format(x)
     posy = "y = {}".format(y)
-    r = int(size/2) # Para dividir o largura em 2
+    r = int(size/2) # Para dividir a largura em 2
     q = int(r/2) # Para dividir a largura em 4
     console_clear()
-    print(colorama.Back.BLUE + " "*(r - int(len(txt)/2) - 2) + txt + " "*(r - (len(txt) - int(len(txt)/2)) - 2) + colorama.Style.RESET_ALL)
+    print(colorama.Back.BLUE + " "*(r - 6) + txt + " "*(size + 2 - (r + len(txt))) + colorama.Style.RESET_ALL) # Corrigir isso
     print("\n".join("".join(el for el in row) for row in matriz))
-    print(colorama.Back.BLUE + " "*(q - int(len(posx)/2) - 1) + posx + " "*(q - (len(posx) - int(len(posx)/2))) + " "*(q - int(len(posy)/2)) + posy + " "*(q - (len(posy) - int(len(posy)/2)) - 1) + colorama.Style.RESET_ALL)
+    print(colorama.Back.BLUE + " "*(q - 4) + posx + " "*(r - (q + len(posx)) + 2) + " "*(q - 4) + posy + " "*(r - (q + len(posy))+ 2) + colorama.Style.RESET_ALL)
 
 dimension = int(input("Digite a dimensão da rede: ")) + 2
 console_clear()
@@ -29,7 +30,7 @@ console_clear()
 
 box_symb = ["\u2554","\u2557","\u2551","\u2550","\u255A","\u255D", "\u001b[35m\u25A0\u001b[0m", "\u001b[35m\u2584\u001b[0m", "\u001b[35m\u2580\u001b[0m"]
 matrix = [[0 for i in range(dimension)] for j in range(dimension)] # Matriz que vai ser printada no console
-pos_init = int(dimension/2) - 1
+pos_init = round(dimension/2) - 1
 y,x = [pos_init,pos_init] # Posição inicial da partícula
 steps = 0
 
@@ -57,7 +58,6 @@ for j in range(dimension):
 # Como a largura agora é o dobro da original, para compensar na posição da partícula sempre será adicionado um espaço em branco.
  
 draw(matrix) # Printar a partícula na posição inicial
-input()
 while steps < mov: # Loop para mudar a posição da partícula
     p = random() # Número aleatório entre 0 e 1
     loc_init_part = [y,x]
@@ -128,6 +128,7 @@ while steps < mov: # Loop para mudar a posição da partícula
             x -= 1
         elif 0.50 < p <= 0.75:
             x += 1
+    # Condições para inserir os espaços e a partícula 
     if x == 1 and y == 1:
         matrix[y][x] = box_symb[8] + " "
     elif x == dimension - 2 and y == 1:
@@ -136,15 +137,13 @@ while steps < mov: # Loop para mudar a posição da partícula
         matrix[y][x] = " " + box_symb[7]
     elif x == 1 and y == dimension - 2:
         matrix[y][x] = box_symb[7] + " "
-    elif x == 1:
+    elif x < pos_init:
         matrix[y][x] = box_symb[6] + " "
-    elif x == dimension - 2:
+    elif x >= pos_init:
         matrix[y][x] = " " + box_symb[6]
-    else:
-        matrix[y][x] = box_symb[6] + " "
     loc_fin_part = [y,x]
     if loc_fin_part != loc_init_part:
         steps += 1
     time.sleep(tm)
     draw(matrix)
-input()
+input("Aperte enter para sair. ") # Só para não fechar assim que terminar de executar

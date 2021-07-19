@@ -15,7 +15,7 @@ def draw(matriz):
     r = int(size/2) # Para dividir a largura em 2
     q = int(r/2) # Para dividir a largura em 4
     console_clear()
-    print(colorama.Back.BLUE + " "*(r - 6) + txt + " "*(size + 2 - (r + len(txt))) + colorama.Style.RESET_ALL) # Corrigir isso
+    print(colorama.Back.BLUE + " "*(r - int(len(txt)/2)) + txt + " "*(size - (r + len(txt) - int(len(txt)/2))) + colorama.Style.RESET_ALL)
     print("\n".join("".join(el for el in row) for row in matriz))
     print(colorama.Back.BLUE + " "*(q - 4) + posx + " "*(r - (q + len(posx)) + 2) + " "*(q - 4) + posy + " "*(r - (q + len(posy))+ 2) + colorama.Style.RESET_ALL)
 

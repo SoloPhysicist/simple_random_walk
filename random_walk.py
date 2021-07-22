@@ -1,23 +1,50 @@
 from random import random
 import time, colorama, os, platform
 os_name = platform.system()
+
+def blue_back(dim,*args):
+    div = round(dim/(2*len(args)))
+    texts = []
+    total_size = 0
+    max_size = max(len(k) for k in args)
+    for text in args:
+        if len(text) < max_size:
+            tws = " "*(max_size - len(text))
+        tws = " "*(div - int(len(text)/2)) + text
+        tws += " "*(2*div - len(tws))
+        texts.append(tws)
+        total_size += len(tws)
+    if total_size < dim:
+        texts[0] += " "*(dim - total_size)
+    elif total_size > dim:
+        texts[0] = texts[0][:dim - total_size]
+    a = 0; b = 0
+    while texts[0][a] == " ":
+        a += 1
+    while texts[-1][-1 + b] == " ":
+        b -= 1
+    b *= -1
+    if a < b:
+        texts[0] = " "*(b - a) + texts[0][0:-(b-a)]
+    f_texts = "".join(k for k in texts)    
+    print(colorama.Back.BLUE + f_texts + colorama.Style.RESET_ALL)
+    
 def console_clear():
     if os_name == "Windows":
         os.system("cls")
         return
     os.system("clear")
+
 def draw(matriz):
     global steps, dimension
-    size = dimension*2 + 2
+    size = dimension*2 - 2 # -2 pq as barras laterais não seguem o padrão de possuir um espaço
     txt = "mov = {}".format(steps)
     posx = "x = {}".format(x)
     posy = "y = {}".format(y)
-    r = int(size/2) # Para dividir a largura em 2
-    q = int(r/2) # Para dividir a largura em 4
     console_clear()
-    print(colorama.Back.BLUE + " "*(r - int(len(txt)/2)) + txt + " "*(size - (r + len(txt) - int(len(txt)/2))) + colorama.Style.RESET_ALL)
+    blue_back(size, txt)
     print("\n".join("".join(el for el in row) for row in matriz))
-    print(colorama.Back.BLUE + " "*(q - 4) + posx + " "*(r - (q + len(posx)) + 2) + " "*(q - 4) + posy + " "*(r - (q + len(posy))+ 2) + colorama.Style.RESET_ALL)
+    blue_back(size,posx,posy)
 
 dimension = int(input("Digite a dimensão da rede: ")) + 2
 console_clear()
